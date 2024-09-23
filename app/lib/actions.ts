@@ -31,7 +31,7 @@ export async function updateInvoice(id: string, formData: FormData) {
     amount: formData.get('amount'),
     status: formData.get('status'),
   });
-    
+
   // store monetary values in cents to eliminate Javascript 
   // floating-point errors #codingbestpractices
   const amountInCents = amount * 100;
@@ -47,5 +47,9 @@ export async function updateInvoice(id: string, formData: FormData) {
   //clear Client-side Router Cache and trigger a new request to the server
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
+}
 
+export async function deleteInvoice(id: string) {
+  await sql`DELETE FROM invoices WHERE id = ${id}`;
+  revalidatePath('/dashboard/invoices');
 }
