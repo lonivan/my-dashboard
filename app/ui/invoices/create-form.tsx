@@ -51,7 +51,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
               {error}
             </p>
           ))}
-      </div>
+      </div> 
         </div>
 
         {/* Invoice Amount */}
