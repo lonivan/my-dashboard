@@ -32,7 +32,7 @@ export default async function InvoicesTable({
                         width={28}
                         height={28}
                         //comment image alt prompt tp test 'next lint' 
-                        //alt={`${invoice.name}'s profile picture`}
+                        alt={`${invoice.name}'s profile picture`}
                       />
                       <p>{invoice.name}</p>
                     </div>

@@ -11,6 +11,7 @@ const metadata: Metadata = {
 export default async function Page({ params }: { params: { id: string } }) {
     
     const id = params.id;
+    // fetch both the invoice and acustomers in parallel
     const [invoice, customers] = await Promise.all([
         fetchInvoiceById(id),
         fetchCustomers(),
