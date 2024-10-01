@@ -33,7 +33,7 @@ export type State = {
   message?: string | null;
 };
 
-/*CREATE INVOICE*/ 
+/* CREATE INVOICE */ 
 export async function createInvoice(prevState: State, formData: FormData) {
   // Validate form using Zod
   const validatedFields = CreateInvoice.safeParse({
@@ -73,7 +73,7 @@ export async function createInvoice(prevState: State, formData: FormData) {
   redirect('/dashboard/invoices');
 }
 
-/*UPDATE INVOICE*/ 
+/* UPDATE INVOICE */ 
 export async function updateInvoice(id: string, formData: FormData) {
   const { customerId, amount, status } = UpdateInvoice.parse({
     customerId: formData.get('customerId'),
@@ -83,21 +83,31 @@ export async function updateInvoice(id: string, formData: FormData) {
  
   const amountInCents = amount * 100;
  
-  await sql`
-    UPDATE invoices
-    SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-    WHERE id = ${id}
-  `;
+ try {
+   await sql`
+     UPDATE invoices
+     SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
+     WHERE id = ${id}
+   `;
+ } catch (error) {
+    return { message: 'Database Error: Failled To Update Invoice.'};
+ }
  
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
 }
 
 
-/* DELETE INVOICE*/
+/* DELETE INVOICE */
 export async function deleteInvoice(id: string) {
-  await sql`DELETE FROM invoices WHERE id = ${id}`;
-  revalidatePath('/dashboard/invoices');
+
+  try {
+    await sql`DELETE FROM invoices WHERE id = ${id}`;
+    revalidatePath('/dashboard/invoices');
+    return { message: 'Deleted Invoice.'}
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Invoice.'};
+  }
 }
 
 export async function authenticate(
